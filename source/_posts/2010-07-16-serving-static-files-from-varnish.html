@@ -1,0 +1,17 @@
+---           
+layout: post
+title: Serving static files from Varnish
+date: "2010-07-16 21:30:00 UTC"
+comments: false
+categories: varnish
+---
+
+<p>At <a href="http://locamoda.com">LocaModa</a>, most of our APIs are eventually consumed by ActionScript 3 applications run on large outdoor screens or in users' web browsers. Flash's cross-domain request protection incurres some round-trip latency, which essentially means wasted screen time, which is money, and I'd like to share one way we optimize for this.</p>
+
+<p>We use the excellent Varnish HTTP accelerator in front of our application servers. True, we could easily be serving crossdomain.xml from Tomcat, or Apache, or NginX, but Varnish is the only part of the infrastructure I'm really happy with for the long-term. This is why I decided to serve a static file from Varnish which, officially, doesn't do this.</p>
+
+{% gist 494303 crossdomain.xml %}
+
+<p>"Error 843? What the hell is that?" <code>vcl_recv</code> is intercepting requests for crossdomain.xml and returning an illegal, non-standard, stupid error. 843 is meaningful to those familiar with Flash socket connections as the TCP port number for socket policy requests. (I wrote a <a href="http://github.com/jelder/flashpolicyd/">server</a> for this a while ago.)</p>
+
+In <code>vcl_error</code>, we catch 843's and synthesize a response. The response has a far-future expiration and a 200 response code. These requests are served even faster than Varnish's already blindingly fast cache hits.

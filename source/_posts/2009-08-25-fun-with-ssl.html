@@ -1,0 +1,67 @@
+---           
+layout: post
+title: Fun with SSL
+date: "2009-08-25 19:59:00 UTC"
+comments: false
+categories: 
+---
+
+<p>I'm sure you love renewing SSL certificates almost as much as I do. Nothing beats the satisfaction of... slogging through a bunch of complicated commands you haven't typed in years just to maintain status quo. Right.</p>
+<p>Having had an opportunity to take better notes on this process for my employer, I present to you a few brief commands to make renewing your SSL certificates almost painless.</p>
+<ol>
+<li>First, check your expiration date.
+<br />
+<br />
+<pre>openssl s_client -connect host01.example.com:443 &lt; /dev/null 2&gt; /dev/null |\
+   sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' |\
+   openssl x509 -enddate
+
+</pre>
+</li>
+<li>Renewal time is an great opportunity to rotate your key. This is technically optional but it's good practice:
+<br />
+<br />
+<pre>openssl genrsa -out example_com.key 1024
+</pre>
+</li>
+<li>You'll need both the key and the about-to-expire certificate in the current directory for the next step. This will create a new CSR with all of the same parameters you used last time. Take this over to your preferred certificate authority and begin their renewal process.
+<br />
+<br />
+<pre>openssl x509 \
+    -x509toreq \
+    -signkey example_com.key \
+    -in example_com.crt
+</pre>
+</li>
+</ol>
+If you only need the key and certificate pair for your application (eg, Apache, NginX, slapd... most applications), you're done. However, if you need to use this certificate with Java servers as well, keep reading (wildcard certificates for the win). This procedure is recommended for ActiveMQ but should be directly applicable to Tomcat et al.
+<br />
+<ol start="4">
+<li>
+The Java <code>keytool</code> command doesn't offer any way to import an x.509 key by itself. The workaround is to first merge the x.509 certificate and key to a new PKCS12.
+<br />
+<br />
+<pre>openssl pkcs12 \
+    -export \
+    -in example_com.crt \
+    -inkey example_com.key \
+    -out example_com.p12
+</pre>
+</li>
+<li>
+Now use <code>keytool</code> to convert that PKCS12 file into a Java keystore file. 
+<br />
+<br />
+<pre>keytool \
+    -importkeystore \
+    -deststorepass changeme \
+    -destkeypass changeme \
+    -destkeystore keystore.jks \
+    -srckeystore example_com.p12 \
+    -srcstoretype PKCS12 \
+    -srcstorepass changeme \
+    -alias 1
+</pre>
+</li>
+</ol>
+That's it. Like I said, I highly recommend wildcard certificates if you can afford the initial expense. I hate having to justify the expense and effort buying a new certificate each time I bring up a new service. Keeping your certificates in a git repository also takes away some of the stress here: no fears of screwing something up and deleting a file that cost you hundreds of dollars to generate.

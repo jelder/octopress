@@ -1,0 +1,15 @@
+---           
+layout: post
+title: Miscellaneous discoveries
+date: "2008-05-06 14:58:00 UTC"
+comments: false
+categories: 
+---
+
+<p>Two problems which have been bothering me forever have finally been solved. One (and this should have been obvious) is revealing the total system memory on BSD-like systems from the command line. There is no equivalent of Linux's <code>free -m</code>. The closest approximation is <code>sysctl hw.physmem</code>. This lead to a revelation that one of my OpenBSD firewalls had been provisioned with several gigabytes more than it would ever, ever need. Yay!</p>
+
+<p>The second was, how the heck do I get Dell service tag of an ill server without actually going to the datacenter? <code>sudo dmidecode -s system-serial-number</code></p>
+
+<p>Yay again. Definitely time to get myself some outside time.</p>
+
+<p><strong>Update: </strong>Need the service tag off your OpenBSD box? <code>sysctl hw.serialno</code></p>

@@ -1,0 +1,10 @@
+---           
+layout: post
+title: '"Fun" with Flash'
+date: "2008-11-29 19:18:00 UTC"
+comments: false
+categories: 
+---
+
+Here's a high performance Flash policy server I wrote over the long weekend. Just something to stay sharp between the ample meals. I was able to sustain 33,000 requests per minute on my MacBook Pro from localhost with minimal load. Tested on and functional but not quite as fast on OpenBSD (not sure why yet). My Linux test box gave me well over 145,000 requests per minute. This is probably several orders of magnitude faster than anyone needs, but here ya go. GPL, of course.
+<ul><li><a href="http://jelder.s3.amazonaws.com/flashpolicyd">flashpolicyd</a></li><li><a href="http://jelder.s3.amazonaws.com/flashpolicy-benchmark">flashpolicy-benchmark</a></li></ul><span style="font-weight: bold;">Update:</span> I just posted a new version which will drop privileges after opening 843.

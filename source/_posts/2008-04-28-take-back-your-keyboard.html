@@ -1,0 +1,32 @@
+---           
+layout: post
+title: Take Back Your Keyboard!
+date: "2008-04-28 00:11:00 UTC"
+comments: false
+categories: 
+---
+
+<p>A good friend of mine has gone to great lengths in refining the pathway between his brain and his computer. That is to say, he's <a href="http://www.interloper.net/keyboard/">serious about keyboard design</a>.</p>
+<p>I'm not quite ready to invest in an ergonomic (and scary looking) keyboard-as-cereal-bowl, or the ultimate extreme, hacking up my own Dvorak variant.What I am willing to do, however, is repurpose  my utterly useless Caps Lock.</p>
+<p>Thanks to inspiration from Bill in 2006 and lots of experiments since, I am now able to publish my findings on the subject. <a href="http://www.vim.org/">VIM</a> users' most frequently used key is probably Escape. For me that means moving my ring finger about three inches diagonally away from the home row, maybe a few hundred times an hour. Plus, the top row is frequently smaller than the other rows. It's actually designed to be hard to hit without effort. Caps Lock, meanwhile, is both enormous and well within pinky range on the home row.</p>
+<p>For Windows, it's a registry hack <a href="http://jelder.blogspot.com/2007/03/vi-fun.html">which I've written about before</a>. Create a file called <code>CapsLockEscape.reg</code> and paste this text into it, save it, and double-click. You'll have to log out and log back in (or reboot) for it to take affect.
+<pre>
+Windows Registry Editor Version 5.00
+
+[HKEY_CURRENT_USER\Keyboard Layout]
+"Scancode Map"=hex:00,00,00,00,00,00,00,00,02,00,00,00,01,00,3a,00,00,00,00,00
+</pre>
+</p>
+<p>For the Debian and Ubuntu consoles, add this line to <code>/etc/console-tools/remap</code>, then either run <code>/etc/init.d/console-screen.sh</code> or reboot.<pre>
+s/keycode  58 = Caps_Lock/keycode  58 = Escape/;
+</pre></p>
+<p>For X11, create a file called <code>~/.capslockescape</code> with the following contents, then run <code>xmodmap ~/.capslockescape</code> to try it out. Add that command to your <code>~/.xinitrc</code> to make it permanent.<pre>
+remove Lock = Caps_Lock
+keysym Escape = Caps_Lock
+keysym Caps_Lock = Escape
+add Lock = Caps_Lock
+</pre>
+</p>
+<p>The hard part was Mac OS X Leopard. I went so far as to open a RentACoder.com auction for someone willing to write the appropriate keyboard driver. I opened the bidding at $100, and offered it to everyone who had written keyboard macro software for the Mac. One <a href="http://www.pqrs.org/tekezo/">Takayama Fumihiko</a> declined the offer but linked me to something he had already written, <a href="http://www.pqrs.org/tekezo/macosx/keyremap4macbook/extra.html">PCKeyboardHack</a>.
+The magic number is <strong>53</strong>.</p>
+<a onblur="try {parent.deselectBloggerImageGracefully();} catch(e) {}" href="http://bp1.blogger.com/_3yeNfUX_EU8/SBUmoPYaBBI/AAAAAAAAAF8/-YvOEjGqTLc/s1600-h/PCKeyboardHack.png"><img style="float:left; margin:0 10px 10px 0;cursor:pointer; cursor:hand;" src="http://bp1.blogger.com/_3yeNfUX_EU8/SBUmoPYaBBI/AAAAAAAAAF8/-YvOEjGqTLc/s320/PCKeyboardHack.png" border="0" alt=""id="BLOGGER_PHOTO_ID_5194100218007258130" /></a><div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/6694184-6772394419787772914?l=blog.jacobelder.com' alt='' /></div><img src="http://feeds.feedburner.com/~r/jelder/~4/iDaxaDZDsL8" height="1" width="1"/>

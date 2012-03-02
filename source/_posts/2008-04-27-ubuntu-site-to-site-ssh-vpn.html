@@ -1,0 +1,49 @@
+---           
+layout: post
+title: Ubuntu Site-to-Site SSH VPN
+date: "2008-04-27 09:50:00 UTC"
+comments: false
+categories: 
+---
+
+<p>Weekend Project time. Here's how to build a VPN using just SSH and two Ubuntu machines. At least one of these machines should have a static IP or DNS, and they should both be the default gateway for their respective sites.</p>
+
+<p>MachineA is the originator and has a local network on NetworkA/24. MachineB has a static name on the Internet and a local network called NetworkB/24. Our point-to-point network is 10.0.0.0/24, with MachineA at 10.0.0.0.1 and MachineB a 10.0.0.2. I will assume for brevity that you have already established an SSH trust relationship between root@MachineA and root@MachineB.</p>
+
+MachineA:/etc/interfaces:
+<pre>
+auto tun0
+iface tun0 inet static
+      pre-up ssh -f -w 0:0 MachineB "ifdown tun0 ; ifup tun0"
+      pre-up sleep 5
+      address 10.0.0.2
+      pointopoint 10.0.0.1
+      netmask 255.255.255.0
+      up ip route add NetworkB/24 via 10.0.0.1
+      down ip route del NetworkB/24 via 10.0.0.1
+</pre>
+
+MachineB:/etc/network/interfaces:
+<pre>
+iface tun0 inet static
+      address 10.0.0.1
+      pointopoint 10.0.0.2
+      netmask 255.255.255.0
+      up ip route add NetworkA/24 via 10.0.0.2
+      down ip route del NetworkA/24 via 10.0.0.2
+</pre>
+
+<p>(Note that MachineA's interface is set to auto, but MachineB's is not.)</p>
+
+<p>Since these are the gateways, we're probably running a netfilter wrapper such as Shorewall. In that case, we'll have a few more things to add. They'll be the same on both ends.</p>
+
+<ul>
+<li>In <code>/etc/shorewall/zones</code>, add: <code>vpn ipv4</code></li>
+<li>In <code>/etc/shorewall/interfaces</code>, add: <code>vpn tun0 detect</code></li>
+<li>In <code>/etc/shorewall/rules</code>, add:<br/><code>ACCEPT vpn loc all <br/>ACCEPT loc vpn all</code></li>
+<li>And finally, in <code>/etc/modules</code>, add <code>tun</code></li>
+</ul>
+
+<p>After restarting Shorewal and loading the tun device (<code>modprobe tun && invoke-rc.d shorewall restart</code>), you should now be able to run <code>ifup tun0</code> on MachineA. Ta-da! You can now connect to your remote networks as if they were a single hop away.</p>
+
+<p>This solution shares some problems with all TCP-only VPNs. Each relayed packet has a reduced payload size, so you'll see more fragmentation. There are also problems related to running <a href="http://en.wikipedia.org/wiki/Nagle%27s_algorithm">Nagle</a> on top of Nagle. Depending on your expected traffic, you might have some luck enabling compression. See <a href="http://www.openbsd.org/cgi-bin/man.cgi?query=ssh_config">ssh_config(5)</a>. There are also some problems more or less unique to SSH VPNs. If the MachineB's host key changes, MachineA won't be able to establish a connection until the old key is removed from MachineA:/root/.ssh/known_keys. This also makes failover scenarios pretty ugly. Good luck!</p><div class="blogger-post-footer"><img width='1' height='1' src='https://blogger.googleusercontent.com/tracker/6694184-8986635983515148773?l=blog.jacobelder.com' alt='' /></div><img src="http://feeds.feedburner.com/~r/jelder/~4/Vy1KoTP2Ah4" height="1" width="1"/>

@@ -1,0 +1,15 @@
+---           
+layout: post
+title: Getting busy with INFORMATION_SCHEMA
+date: "2009-04-08 19:13:00 UTC"
+comments: false
+categories: 
+---
+
+<p>I've been wanting to use this trick forever. Here's how to quickly, effortlessly, and I should add, destructively, convert all tables in a given database to UTF8.</p>
+
+<p><code>
+mysql --batch information_schema -e "select concat('ALTER TABLE ', TABLE_NAME,' ONVERT TO CHARACTER SET utf8 COLLATE utf8_general_ci;') as '--' from TABLES where TABLE_SCHEMA='somedb' and TABLE_COLLATION not like '%utf8%'" | mysql somedb
+</code></p>
+
+<p>The addition of INFORMATION_SCHEMA combined with CONCAT makes it possible to do arbitrarily cool things with MySQL. Love it.</p>
