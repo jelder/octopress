@@ -6,17 +6,17 @@ sharing: false
 footer: false
 ---
 
-Sorry, that page doesn't exist. <span id="guess"/>
+Sorry, that page doesn't exist. <span id="suggestion"/>
 
 <script type="text/javascript">
 //<![CDATA[
 if (window.location.pathname.indexOf(".html") > 0) {
-  suggestion = "The structure of this site changed recently. Could you be looking for <a></a> instead?"
+  text = "The structure of this site changed recently. Could you be looking for <a></a> instead?"
   guess = window.location.pathname.replace(/\.html/,"/")
   console.log("Suggesting " + guess);
-  $("#guess").html(suggestion);
-  $("#guess a").html(guess);
-  $("#guess a").attr("href", guess);
+  $("#suggestion").html(text);
+  $("#suggestion a").html(guess);
+  $("#suggestion a").attr("href", guess);
 }
 //]]>
 </script>
