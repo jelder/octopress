@@ -29,7 +29,7 @@ Despite initial appearences, and without much justification from Amazon, the S3 
 * `Content-Language`
 * `Content-Encoding`
 
-Users can apply their own metadata, but it will always be prefixed with `x-amz-meta`. CSS3 brings the ability to embed arbitrary fonts on the web. Fonts are the words which clothes wear, and CSS3 is why the web is looking so sharp lately. The difficulty is that W3 puts fonts under a [same-origin restriction](http://www.w3.org/TR/css3-fonts/#same-origin-restriction). Thus, embedding these fonts requires these additional headers:
+Users can apply their own metadata, but it will always be prefixed with `x-amz-meta`. CSS3 brings the ability to embed arbitrary fonts on the web. Fonts are the clothes words wear, and CSS3 is why the web is looking so sharp lately. The difficulty is that W3 puts fonts under a [same-origin restriction](http://www.w3.org/TR/css3-fonts/#same-origin-restriction). Thus, embedding these fonts requires these additional headers:
 
 * `Access-Control-Allow-Headers`
 * `Access-Control-Allow-Origin`
