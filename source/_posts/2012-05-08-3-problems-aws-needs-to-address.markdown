@@ -6,7 +6,7 @@ comments: true
 categories: aws s3 cloudfront 
 ---
 
-A few days ago, in a fit of pre-launch, late-night, frustration, I issued the following 140 missive.
+A few days ago, in a fit of pre-launch, late-night frustration, I issued the following 140 missive.
 
 {% tweet https://twitter.com/#!/jelder/status/199295708635987968 align=center %}
 
