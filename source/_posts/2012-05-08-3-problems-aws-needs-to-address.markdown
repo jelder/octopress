@@ -6,9 +6,9 @@ comments: true
 categories: aws s3 cloudfront 
 ---
 
-A few days ago, in a fit of pre-launch, late-night frustration, I issued the following 140 missive.
+A few days ago, in a fit of pre-launch, late-night frustration, I issued the following 140-character missive.
 
-{% tweet https://twitter.com/#!/jelder/status/199295708635987968 align=center %}
+{% tweet https://twitter.com/#!/jelder/status/199295708635987968 %}
 
 To my surprise, this actually got a response. Someone monitoring the @awscloud account opened a trouble ticket to my email address asking for clarification. The exchange was friendly and hopefully, and I think it's worth sharing here.
 
@@ -75,3 +75,11 @@ An Argument for Increasing TCP's Initial Congestion Window&#8221;, <a href="auth
 
 The @awscloud guys are apparently considering my request. If I get any answers back, I will be sure to post them here.
 
+### Update - May 12, 2012
+
+Amazon's Senior Evangelist for AWS @jeffbar has reached out to me to clarify one point about my post.  
+
+{% tweet https://twitter.com/#!/jeffbarr/status/201093102914633728 %}
+{% tweet https://twitter.com/#!/jeffbarr/status/201104664018690049 %}
+
+There you have it. CloudFront definitely deserves credit for upping the amount of content websites can render before round trip latency starts getting in the way.
