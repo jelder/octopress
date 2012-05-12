@@ -75,6 +75,7 @@ An Argument for Increasing TCP's Initial Congestion Window&#8221;, <a href="auth
 
 The @awscloud guys are apparently considering my request. If I get any answers back, I will be sure to post them here.
 
+<a id="update"/></a> 
 ### Update - May 12, 2012
 
 Amazon's Senior Evangelist for AWS @jeffbar has reached out to me to clarify one point about my post.  
